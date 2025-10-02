@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Application Project</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to right, #f8e1f4, #ffffff);
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        header {
+            padding: 1rem 2rem;
+            background: #ff69b4;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+        }
+        main h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #ff69b4;
+        }
+        main p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            max-width: 600px;
+        }
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        a.button {
+            text-decoration: none;
+            background: #ff69b4;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            transition: background 0.3s ease;
+        }
+        a.button:hover {
+            background: #ff4fa3;
+        }
+        footer {
+            padding: 1rem;
+            text-align: center;
+            background: #f2f2f2;
+            font-size: 0.9rem;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        Application Project
+    </header>
+
+    <main>
+        <h1>Welcome Application Project</h1>
+        <p>
+            This is an API-powered project — but we made this page a little friendlier to look at!<br>
+            Use our API endpoints to access and manage data, or log into the admin panel if you're an administrator.
+        </p>
+        <div class="button-group">
+            <a class="button" href="/admin/">Go to Admin Panel</a>
+            <a class="button" href="/swagger/">View API Docs</a>
+        </div>
+    </main>
+
+    <footer>
+        &copy; {{ now|default:"2025" }} Application Project — Built with Django
+    </footer>
+</body>
+</html>
