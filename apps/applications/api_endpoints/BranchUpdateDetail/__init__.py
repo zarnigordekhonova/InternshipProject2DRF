@@ -1,1 +1,1 @@
-from .views import BranchUpdateAPIView
+from .views import BranchDetailUpdateAPIView

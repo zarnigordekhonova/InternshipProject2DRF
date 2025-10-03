@@ -7,7 +7,7 @@ from apps.applications.models import Branch
 from apps.applications.api_endpoints.BranchUpdateDetail.serializers import BranchUpdateSerializer
 
 
-class BranchUpdateAPIView(RetrieveUpdateAPIView):
+class BranchDetailUpdateAPIView(RetrieveUpdateAPIView):
     queryset = Branch.objects.all()
     serializer_class =  BranchUpdateSerializer
     permission_classes = [IsAuthenticated]
@@ -23,5 +23,5 @@ class BranchUpdateAPIView(RetrieveUpdateAPIView):
     
 
 __all__ = [
-    "BranchUpdateAPIView"
+    "BranchDetailUpdateAPIView"
 ]

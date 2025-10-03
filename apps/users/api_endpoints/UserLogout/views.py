@@ -14,7 +14,7 @@ class UserLogoutAPIView(APIView):
         try:
             token = RefreshToken(refresh_token)
             token.blacklist()
-            return Response(status=205)
+            return Response(status=204)
         except Exception:
             return Response({"error": "invalid token"}, status=400)
 

@@ -9,14 +9,14 @@ from apps.applications.models import (
 
 @admin.register(Region)
 class RegionAdmin(admin.ModelAdmin):
-    list_display = ('region_name',)
+    list_display = ('id', 'region_name',)
     search_fields = ('region_name',)
     ordering = ('region_name',)
 
 
 @admin.register(District)
 class DistrictAdmin(admin.ModelAdmin):
-    list_display = ('district_name', 'region')
+    list_display = ('id', 'district_name', 'region')
     list_filter = ('region',)
     search_fields = ('district_name', 'region__region_name')
     autocomplete_fields = ['region']
@@ -39,21 +39,21 @@ class BranchAdmin(admin.ModelAdmin):
 
 @admin.register(Specialty)
 class SpecialtyAdmin(admin.ModelAdmin):
-    list_display = ('name',)
+    list_display = ('id', 'name',)
     search_fields = ('name',)
     ordering = ('name',)
 
 
 @admin.register(Specialist)
 class SpecialistAdmin(admin.ModelAdmin):
-    list_display = ('title',)
+    list_display = ('id', 'title',)
     search_fields = ('title',)
     ordering = ('title',)
 
 
 @admin.register(SpecialistsRequired)
 class SpecialistsRequiredAdmin(admin.ModelAdmin):
-    list_display = ('specialty', 'required_specialists', 'min_count')
+    list_display = ('id', 'specialty', 'required_specialists', 'min_count')
     list_filter = ('specialty', 'required_specialists')
     search_fields = ('specialty__name', 'required_specialists__title')
     autocomplete_fields = ['specialty', 'required_specialists']
@@ -71,7 +71,7 @@ class SpecialistsRequiredAdmin(admin.ModelAdmin):
 
 @admin.register(Equipment)
 class EquipmentAdmin(admin.ModelAdmin):
-    list_display = ('name', 'description_short')
+    list_display = ('id', 'name', 'description_short')
     search_fields = ('name', 'description')
     ordering = ('name',)
     
@@ -97,7 +97,7 @@ class EquipmentRequiredItemInline(admin.TabularInline):
 
 @admin.register(EquipmentRequired)
 class EquipmentRequiredAdmin(admin.ModelAdmin):
-    list_display = ('specialty', 'get_equipment_count')
+    list_display = ('id', 'specialty', 'get_equipment_count')
     search_fields = ('specialty__name',)
     autocomplete_fields = ['specialty']
     inlines = [EquipmentRequiredItemInline]
@@ -120,6 +120,7 @@ class ApplicationBranchInline(admin.TabularInline):
 @admin.register(Application)
 class ApplicationAdmin(admin.ModelAdmin):
     list_display = (
+        'id',
         'registration_number', 
         'full_name', 
         'email', 
@@ -173,6 +174,7 @@ class ApplicationAdmin(admin.ModelAdmin):
 @admin.register(ApplicationBranch)
 class ApplicationBranchAdmin(admin.ModelAdmin):
     list_display = (
+        'id',
         'application', 
         'branch', 
         'get_district', 
