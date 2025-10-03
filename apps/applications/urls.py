@@ -25,6 +25,22 @@ from apps.applications.api_endpoints import (
     SpecialistDeleteAPIView,
 
     # SpecialistRequired
+    SpecialistsRequiredCreateAPIView,
+    SpecialistsRequiredListAPIView,
+    SpecialistRequiredDetailUpdateAPIView,
+    SpecialistsRequiredDeleteAPIView,
+
+    # Equipment
+    EquipmentCreateAPIView,
+    EquipmentListAPIView,
+    EquipmentUpdateDetailAPIView,
+    EquipmentDeleteAPIView,
+
+    # EquipmentRequired
+    EquipmentRequiredItemCreateAPIView,
+    EquipmentRequiredItemListAPIView,
+    EquipmentRequiredItemRetrieveUpdateAPIView,
+    EquipmentRequiredItemDestroyAPIView,
 )
 
 app_name = "applications"
@@ -54,7 +70,22 @@ urlpatterns = [
     path("delete/<int:pk>/specialist/", SpecialistDeleteAPIView.as_view(), name="specialist-delete"),
 
     # SpecialistRequired
-    
+    path("specialist-required-create/", SpecialistsRequiredCreateAPIView.as_view(), name="specialist-required-create"),
+    path("specialist-required-list/", SpecialistsRequiredListAPIView.as_view(), name="specialist-required-list"),
+    path("update/<int:pk>/specialists-required/", SpecialistRequiredDetailUpdateAPIView.as_view(), name="specialist-required-update-detail"),
+    path("delete/<int:pk>/specialists-required/", SpecialistsRequiredDeleteAPIView.as_view(), name="specialist-required-delete"),
 
+    # Equipment
+    path("equipment-create/", EquipmentCreateAPIView.as_view(), name="equipment-create"),
+    path("equipment-list/", EquipmentListAPIView.as_view(), name="equipment-list"),
+    path("update/<int:pk>/equipment/", EquipmentUpdateDetailAPIView.as_view(), name="equipment-update-detail"),
+    path("delete/<int:pk>/equipment/", EquipmentDeleteAPIView.as_view(), name="equipment-delete"),
 
+    # EquipmentRequired
+    path("equipment-required-create/", EquipmentRequiredItemCreateAPIView.as_view(), name="equipment-required-create"),
+    path("equipment-required-list/", EquipmentRequiredItemListAPIView.as_view(), name="equipment-required-list"),
+    path("update/<int:pk>/equipment-required/", 
+         EquipmentRequiredItemRetrieveUpdateAPIView.as_view(), 
+         name="equipment-required-update-detail"),
+    path("delete/<int:pk>/equipment-required/", EquipmentRequiredItemDestroyAPIView.as_view(), name="equipment-required-delete"),
 ]
