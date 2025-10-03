@@ -1,0 +1,15 @@
+from rest_framework.generics import DestroyAPIView
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
+
+from apps.applications.models import Specialist
+
+
+class SpecialistDeleteAPIView(DestroyAPIView):
+    queryset = Specialist.objects.all()
+    permission_classes = [IsAdminUser | IsAuthenticated]
+
+
+
+__all__ = [
+    "SpecialistDeleteAPIView"
+]

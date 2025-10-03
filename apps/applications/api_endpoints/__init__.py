@@ -13,3 +13,10 @@ from .ApplicationUpdateDetail import * # noqa
 from .SpecialtyCreate import * # noqa
 from .SpecialtyList import * # noqa
 from .SpecialtyUpdateDetail import * # noqa
+from .SpecialtyDelete import * # noqa
+
+# Specialist
+from .SpecialistCreate import * # noqa
+from .SpecialistList import * # noqa
+from .SpecialistUpdateDetail import * # noqa
+from .SpecialistDelete import * # noqa

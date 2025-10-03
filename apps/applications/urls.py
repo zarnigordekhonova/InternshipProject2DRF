@@ -15,7 +15,16 @@ from apps.applications.api_endpoints import (
     # Specialty
     SpecialtyCreateAPIView,
     SpecialtyListAPIView,
-    SpecialtyUpdateDetailAPIView
+    SpecialtyUpdateDetailAPIView, 
+    SpecialtyDeleteAPIView,
+
+    # Specialist
+    SpecialistCreateAPIView,
+    SpecialistListAPIView,
+    SpecialistUpdateDetailAPIView,
+    SpecialistDeleteAPIView,
+
+    # SpecialistRequired
 )
 
 app_name = "applications"
@@ -36,5 +45,16 @@ urlpatterns = [
     path("specialty-create/", SpecialtyCreateAPIView.as_view(), name="specialty-create"),
     path("specialty-list/", SpecialtyListAPIView.as_view(), name="specialty-list"),
     path("update/<int:pk>/specialty/", SpecialtyUpdateDetailAPIView.as_view(), name="specialty-update-detail"),
+    path("delete/<int:pk>/specialty/", SpecialtyDeleteAPIView.as_view(), name="specialty-delete"),
+
+    # Specialist
+    path("specialist-create/", SpecialistCreateAPIView.as_view(), name="specialist-create"),
+    path("specialist-list/", SpecialistListAPIView.as_view(), name="specialist-list"),
+    path("update/<int:pk>/specialist/", SpecialistUpdateDetailAPIView.as_view(), name="specialist-update-detail"),
+    path("delete/<int:pk>/specialist/", SpecialistDeleteAPIView.as_view(), name="specialist-delete"),
+
+    # SpecialistRequired
+    
+
 
 ]
