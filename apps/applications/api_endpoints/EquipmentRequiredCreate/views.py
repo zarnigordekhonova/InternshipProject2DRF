@@ -10,19 +10,30 @@ from apps.applications.api_endpoints.EquipmentRequiredCreate.serializers import 
 
 
 class EquipmentRequiredItemCreateAPIView(CreateAPIView):
-    # Example request body for entering more than one object
     """
+    POST /api/applications/equipment-required-create/
+    
+    Add a required equipment to specific specialty
+
+    Example request body for entering one object:
+    {
+        "specialty": "Pediatriya",
+        "equipment_name": "Tarozi",
+        "min_count": 2
+    }
+
+    Example request body for entering more than one object:
         [
-        {
-            "specialty": "Cardiology",
-            "equipment_name": "ECG Machine",
-            "min_count": 2
-        },
-        {
-            "specialty": "Cardiology",
-            "equipment_name": "X-Ray Machine",
-            "min_count": 1
-        }
+            {
+                "specialty": "Stomotologiya",
+                "equipment_name": "Tarozi",
+                "min_count": 2
+            },
+            {
+                "specialty": "Kardiologiya",
+                "equipment_name": "X-ray machine",
+                "min_count": 1
+            }
         ]
 
     """

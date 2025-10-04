@@ -9,6 +9,16 @@ from django.contrib.auth import login
 from apps.users.api_endpoints.UserLogin.serializers import UserLoginSerializer, UserSerializer
 
 class UserLoginAPIView(GenericAPIView):
+    """
+    POST /api/users/user-login/
+    Login in order to get refresh and access token.
+
+    Example request body:
+    {
+        "phone_number": "+998991234567",
+        "password": "example_password"
+    }
+    """
     permission_classes = (AllowAny,)
     serializer_class = UserLoginSerializer
 

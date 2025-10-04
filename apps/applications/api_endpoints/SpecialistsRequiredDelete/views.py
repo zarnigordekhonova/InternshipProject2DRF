@@ -5,6 +5,11 @@ from apps.applications.models import SpecialistsRequired
 
 
 class SpecialistsRequiredDeleteAPIView(DestroyAPIView):
+    """
+    DELETE /api/applications/delete/{id}/specialists-required/
+
+    Delete required specialist data on specific ID.
+    """
     queryset = SpecialistsRequired.objects.all()
     permission_classes = [IsAdminUser | IsAuthenticated]
 

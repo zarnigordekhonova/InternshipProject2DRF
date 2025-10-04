@@ -8,6 +8,15 @@ from apps.applications.api_endpoints.SpecialtyCreate.serializers import Specialt
 
 
 class SpecialtyCreateAPIView(CreateAPIView):
+    """
+    POST /api/applications/specialty-create/
+    Add a new specialty
+
+    Example request body:
+    {
+        "name": "Pediatriya"
+    }
+    """
     serializer_class = SpecialtyCreateSerializer
     permission_classes = [IsAdminUser | IsAuthenticated]
 

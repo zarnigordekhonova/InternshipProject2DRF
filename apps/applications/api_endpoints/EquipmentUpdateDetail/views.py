@@ -8,6 +8,16 @@ from apps.applications.api_endpoints.EquipmentCreate.serializers import Equipmen
 
 
 class EquipmentUpdateDetailAPIView(RetrieveUpdateAPIView):
+    """
+    Updating/Getting information of equipment on specific ID.
+
+    PUT /api/applications/update/{id}/equipment/
+    PATCH /api/applications/update/{id}/equipment/
+    Update an existing equipment data
+
+    GET /api/applications/update/{id}/equipment/
+    To get an equipment data in detail on specific ID
+    """
     queryset = Equipment.objects.all()
     serializer_class =  EquipmentCreateSerializer
     permission_classes = [IsAuthenticated]

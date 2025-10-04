@@ -178,7 +178,7 @@ class ApplicationBranchRetrieveSerializer(serializers.ModelSerializer):
 
 
 class ApplicationRetrieveSerializer(serializers.ModelSerializer):
-    """Serializer for retrieving application with branches"""
+    """Serializer for retrieving application with branch information"""
     branches = ApplicationBranchRetrieveSerializer(
         source='applicationbranch_set',
         many=True,

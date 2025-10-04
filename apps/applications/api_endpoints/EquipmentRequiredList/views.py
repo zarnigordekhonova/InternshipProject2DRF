@@ -7,6 +7,11 @@ from apps.applications.api_endpoints.EquipmentRequiredList.serializers import Eq
 
 
 class EquipmentRequiredItemListAPIView(ListAPIView):
+    """
+    GET /api/applications/equipment-required-list/
+    
+    Get a list of required equipments linked to specific specialties.
+    """
     serializer_class = EquipmentRequiredItemListSerializer
     permission_classes = [IsAuthenticated]
     queryset = EquipmentRequiredItem.objects.select_related('equipment_required', 'equipment')

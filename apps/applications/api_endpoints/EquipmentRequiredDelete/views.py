@@ -7,6 +7,11 @@ from apps.applications.models import EquipmentRequiredItem
 
 
 class EquipmentRequiredItemDestroyAPIView(DestroyAPIView):
+    """
+    DELETE /api/applications/delete/{id}/equipment-required/
+
+    Delete required equipment data on specific ID.
+    """
     queryset = EquipmentRequiredItem.objects.all()
     permission_classes = [IsAuthenticated]
 

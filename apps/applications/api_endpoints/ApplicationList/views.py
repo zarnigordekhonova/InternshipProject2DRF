@@ -9,7 +9,8 @@ from apps.applications.api_endpoints.ApplicationList.serializers import Applicat
 
 class ApplicationListAPIView(ListAPIView):
     """
-    GET /api/applications/
+    GET /api/applications/application-list/
+    
     GET /api/applications/?status=DRAFT
     GET /api/applications/?status=SUBMITTED
     GET /api/applications/?search=john

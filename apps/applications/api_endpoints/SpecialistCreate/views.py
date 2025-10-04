@@ -8,6 +8,15 @@ from apps.applications.api_endpoints.SpecialistCreate.serializers import Special
 
 
 class SpecialistCreateAPIView(CreateAPIView):
+    """
+    POST /api/applications/specialist-create/
+    Add a new specialist data
+
+    Example request body:
+    {
+        "title": "Lor"
+    }
+    """
     serializer_class = SpecialistCreateSerializer
     permission_classes = [IsAdminUser | IsAuthenticated]
 

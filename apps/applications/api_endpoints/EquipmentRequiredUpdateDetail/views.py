@@ -8,6 +8,16 @@ from apps.applications.api_endpoints.EquipmentRequiredUpdateDetail.serializers i
 
 
 class EquipmentRequiredItemRetrieveUpdateAPIView(RetrieveUpdateAPIView):
+    """
+    Updating/Getting information of required equipment on specific ID.
+
+    PUT /api/applications/update/{id}/equipment-required/
+    PATCH /api/applications/update/{id}/equipment-required/
+    Update an existing required equipment data
+
+    GET /api/api/applications/update/{id}/branch/
+    To get required equipment data in detail on specific ID
+    """
     queryset = EquipmentRequiredItem.objects.all()
     serializer_class = EquipmentRequiredItemUpdateSerializer
     permission_classes = [IsAuthenticated]

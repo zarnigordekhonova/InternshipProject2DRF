@@ -8,10 +8,22 @@ from apps.applications.api_endpoints.SpecialistsRequiredCreate.serializers impor
 
 
 class SpecialistsRequiredCreateAPIView(CreateAPIView):
+    """
+    POST /api/applications/specialist-required-create/
+    Add a required specialist to specific specialty
+
+    Example request body:
+    {
+        "specialty_input_info": "Pediatriya",
+        "specialist_input_info": "Hamshira",
+        "min_count": 2
+    }
+    """
     serializer_class = SpecialistRequiredCreateSerializer
     permission_classes = [IsAdminUser | IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
+
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         branch = serializer.save()

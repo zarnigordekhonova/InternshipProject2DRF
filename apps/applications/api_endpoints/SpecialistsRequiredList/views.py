@@ -10,10 +10,10 @@ from apps.applications.api_endpoints.SpecialistsRequiredList.serializers import 
 
 class SpecialistsRequiredListAPIView(ListAPIView):
     """
-    GET /api/specialties/
-    List all specialties
+    GET /api/applications/specialist-required-list/
+    
+    Get a list of required specialists linked to specific specialties.
     """
-
     serializer_class = SpecialistsRequiredListSerializer
     permission_classes = [IsAuthenticated]
     queryset = SpecialistsRequired.objects.select_related('specialty', 'required_specialists')

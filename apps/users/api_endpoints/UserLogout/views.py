@@ -5,6 +5,17 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 
 class UserLogoutAPIView(APIView):
+    """
+    POST /api/users/user-logout/
+
+    For Postman:
+    Send your refresh token in order to logout of your account.
+
+    Example request body:
+    {
+        "refresh": "refresh_token"
+    }
+    """
     permission_classes = (IsAuthenticated,)
 
     def post(self, request):

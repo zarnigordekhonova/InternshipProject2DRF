@@ -14,7 +14,7 @@ from apps.applications.api_endpoints.ApplicationCreate.serializers import Applic
 
 class ApplicationCreateAPIView(CreateAPIView):
     """
-    POST /api/applications/create/
+    POST /api/applications/application-create/
     Create a new application with branches
     
     Request body example:

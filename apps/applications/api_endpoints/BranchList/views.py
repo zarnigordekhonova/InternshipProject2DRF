@@ -9,6 +9,11 @@ from apps.applications.api_endpoints.BranchList.serializers import BranchListSer
 
 
 class BranchListAPIView(ListAPIView):
+    """
+    GET api/applications/branch-list/
+    
+    Get a list of all branchs with region and district data.
+    """
     serializer_class = BranchListSerializer
     permission_classes = [IsAuthenticated]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]

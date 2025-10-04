@@ -5,6 +5,11 @@ from apps.applications.models import Specialty
 
 
 class SpecialtyDeleteAPIView(DestroyAPIView):
+    """
+    DELETE /api/applications/delete/{id}/specialty/
+
+    Delete specialty data on specific ID.
+    """
     queryset = Specialty.objects.all()
     permission_classes = [IsAdminUser | IsAuthenticated]
 

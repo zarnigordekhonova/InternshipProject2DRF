@@ -6,11 +6,16 @@ from apps.applications.api_endpoints.SpecialistsRequiredUpdateDetail.serializers
 
 
 class SpecialistRequiredDetailUpdateAPIView(RetrieveUpdateAPIView):
-    '''
-    GET /api/specialists-required/<id>/update/
-    PUT /api/specialists-required/<id>/update/
-    PATCH /api/specialists-required/<id>/update/
-    '''
+    """
+    Updating/Getting information of required specialist on specific ID.
+
+    PUT /api/applications/update/{id}/specialists-required/
+    PATCH /api/applications/update/{id}/specialists-required/
+    Update an existing required specialist data
+
+    GET /api/applications/update/{id}/specialists-required/
+    To get required specialist data in detail on specific ID
+    """
     serializer_class = SpecialistRequiredUpdateSerializer
     permission_classes = [IsAdminUser | IsAuthenticated] 
     queryset = SpecialistsRequired.objects.all()

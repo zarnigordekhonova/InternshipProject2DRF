@@ -8,6 +8,16 @@ from apps.applications.api_endpoints.EquipmentCreate.serializers import Equipmen
 
 
 class EquipmentCreateAPIView(CreateAPIView):
+    """
+    POST /api/applications/equipment-create/
+    Add a new equipment name with its description.
+
+    Example request body:
+    {
+        "name": "X-ray machine",
+        "description": "description"
+    }
+    """
     serializer_class = EquipmentCreateSerializer
     permission_classes = [IsAdminUser | IsAuthenticated]
 

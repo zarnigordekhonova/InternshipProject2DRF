@@ -11,6 +11,18 @@ CustomUser = get_user_model()
 
 
 class UserRegisterAPIView(CreateAPIView):
+    """
+    POST /api/users/user-register/
+
+    Register as a user to send an application.
+    Example request body:
+    {
+        "username": "example_username",
+        "phone_number": "+998001112233",
+        "email": "user@example.com",
+        "password": "example_password"
+    }
+    """
     queryset = CustomUser.objects.all()
     permission_classes = (AllowAny,)
     serializer_class = UserRegisterSerializer

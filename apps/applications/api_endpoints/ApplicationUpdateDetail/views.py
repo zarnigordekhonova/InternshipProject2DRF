@@ -16,9 +16,14 @@ from apps.applications.api_endpoints.ApplicationUpdateDetail.serializers import 
 
 class ApplicationDetailUpdateAPIView(RetrieveUpdateAPIView):
     """
-    PUT /api/applications/<id>/update/
-    PATCH /api/applications/<id>/update/
+    Updating/Getting information of application on special ID.
+
+    PUT /api/applications/application/{id}/update/
+    PATCH /api/applications/application/{id}/update/
     Update an existing application
+
+    GET /api/applications/application/{id}/update/
+    To get an application data in detail on specific ID
     
     Supports 'action' parameter:
     - 'save': Keep as DRAFT
@@ -86,7 +91,7 @@ class ApplicationDetailUpdateAPIView(RetrieveUpdateAPIView):
                 application.status = ApplicationStatus.SUBMITTED
                 application.save(update_fields=['status', 'registration_number'])
                 
-                # Send email notification
+                # Send email notification if status is SUBMITTED
                 try:
                     send_application_email(application)
                 except Exception as e:

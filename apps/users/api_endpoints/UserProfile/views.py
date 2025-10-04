@@ -6,6 +6,16 @@ from apps.users.api_endpoints.UserProfile.serializers import GetProfileSerialize
 
 
 class GetProfileAPIView(RetrieveUpdateAPIView):
+    """
+    Updating/Getting information of user's profile.
+
+    PUT /api/users/user-profile/
+    PATCH /api/users/user-profile/
+    Update user's profile information.
+
+    GET /api/users/user-profile/
+    To get user's profie information.
+    """
     serializer_class = GetProfileSerializer
     permission_classes = [IsAuthenticated, ]
 

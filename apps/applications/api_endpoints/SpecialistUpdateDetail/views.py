@@ -8,6 +8,17 @@ from apps.applications.api_endpoints.SpecialistCreate.serializers import Special
 
 
 class SpecialistUpdateDetailAPIView(RetrieveUpdateAPIView):
+    """
+    Updating/Getting information of specialist on specific ID.
+
+    PUT /api/applications/update/{id}/specialist/
+    PATCH /api/applications/update/{id}/specialist/
+    Update an existing specialist data
+
+    GET /api/applications/update/{id}/specialist/
+    To get an specialist data in detail on specific ID
+    
+    """
     queryset = Specialist.objects.all()
     serializer_class =  SpecialistCreateSerializer
     permission_classes = [IsAuthenticated]

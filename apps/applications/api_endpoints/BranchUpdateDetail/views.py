@@ -8,6 +8,16 @@ from apps.applications.api_endpoints.BranchUpdateDetail.serializers import Branc
 
 
 class BranchDetailUpdateAPIView(RetrieveUpdateAPIView):
+    """
+    Updating/Getting information of branch on specific ID.
+
+    PUT /api/api/applications/update/{id}/branch/
+    PATCH /api/api/applications/update/{id}/branch/
+    Update an existing branch
+
+    GET /api/api/applications/update/{id}/branch/
+    To get an branch data in detail on specific ID
+    """
     queryset = Branch.objects.all()
     serializer_class =  BranchUpdateSerializer
     permission_classes = [IsAuthenticated]

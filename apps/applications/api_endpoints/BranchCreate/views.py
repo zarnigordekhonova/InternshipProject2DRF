@@ -8,6 +8,16 @@ from apps.applications.api_endpoints.BranchCreate.serializers import BranchCreat
 
 
 class BranchCreateAPIView(CreateAPIView):
+    """
+    POST /api/applications/branch-create/
+    Create a new branch
+
+    Example request body:
+    {
+        "district_name_input": "Olmazor tumani",
+        "branch_name" : "Olmazor tuman branch"
+    }
+    """
     serializer_class = BranchCreateSerializer
     permission_classes = [IsAdminUser | IsAuthenticated]
 
