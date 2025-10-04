@@ -74,7 +74,6 @@ class ApplicationUpdateSerializer(serializers.ModelSerializer):
             setattr(instance, field, value)
         instance.save()
         
-        # Recreate branches if provided
         if branches_data is not None:
             for branch_data in branches_data:
                 specialties = branch_data.pop('specialties', [])

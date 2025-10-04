@@ -52,7 +52,7 @@ class EquipmentRequiredItemCreateSerializer(serializers.ModelSerializer):
         return super().create(validated_data)
     
 
-# Agar bitta requestda bir nechta jihoz obyektlari kelsa, shularni chiqarish uchun quuyidagi
+# Agar bitta requestda bir nechta jihoz obyektlari kelsa, shularni chiqarish uchun quyidagi
 # serializer ishlatiladi.
 class EquipmentRequiredItemDetailSerializer(serializers.ModelSerializer):
     specialty = serializers.CharField(source="equipment_required.specialty.name", read_only=True)
