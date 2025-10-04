@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.generics import RetrieveUpdateAPIView
 
-from applications.models import EquipmentRequiredItem
+from apps.applications.models import EquipmentRequiredItem
 from apps.applications.api_endpoints.EquipmentRequiredUpdateDetail.serializers import EquipmentRequiredItemUpdateSerializer
 
 

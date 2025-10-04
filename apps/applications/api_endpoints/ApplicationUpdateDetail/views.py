@@ -10,7 +10,7 @@ from rest_framework.permissions import IsAuthenticated
 from apps.applications.models import Application
 from apps.applications.choices import ApplicationStatus
 from apps.applications.utils import generate_registration_number, send_application_email
-from apps.applications.api_endpoints.ApplicationCreate.serializers import ApplicationCreateSerializer
+from apps.applications.api_endpoints.ApplicationUpdateDetail.serializers import ApplicationUpdateSerializer
 from apps.applications.api_endpoints.ApplicationUpdateDetail.serializers import ApplicationRetrieveSerializer
 
 
@@ -24,7 +24,7 @@ class ApplicationDetailUpdateAPIView(RetrieveUpdateAPIView):
     - 'save': Keep as DRAFT
     - 'submit': Change to SUBMITTED (generates registration number and sends email)
     """
-    serializer_class = ApplicationCreateSerializer
+    serializer_class = ApplicationUpdateSerializer
     permission_classes = [IsAuthenticated]
     lookup_field = 'pk'
     
@@ -45,7 +45,7 @@ class ApplicationDetailUpdateAPIView(RetrieveUpdateAPIView):
         """Use different serializer for GET and PUT/PATCH"""
         if self.request.method == 'GET':
             return ApplicationRetrieveSerializer
-        return ApplicationCreateSerializer
+        return ApplicationUpdateSerializer
     
     @transaction.atomic
     def update(self, request, *args, **kwargs):

@@ -1,136 +1,233 @@
+from rest_framework import serializers
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError as DjangoValidationError 
-from rest_framework import serializers
 from rest_framework.exceptions import ValidationError as DRFValidationError 
-import json
 
 from apps.applications.models import (
     Application, ApplicationBranch, Specialty, 
     Specialist, Equipment, SpecialistsRequired,
-    EquipmentRequired, EquipmentRequiredItem
+    EquipmentRequired, EquipmentRequiredItem, Branch
 )
 
 
-class ApplicationBranchSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ApplicationBranch
-        fields = [
-            'branch',
-            'specialties',
-            'selected_specialists',
-            'selected_equipment'
-        ]
-        extra_kwargs = {
-            'specialties': {'allow_empty': False, 'required': True}, 
-            'selected_specialists': {'required': False},
-            'selected_equipment': {'required': False},
-        }
+class ApplicationBranchSerializer(serializers.Serializer):
+    branch = serializers.CharField()
+
+    specialties = serializers.ListField(
+        child=serializers.CharField(),
+        allow_empty=False
+    )
+    selected_specialists = serializers.ListField(
+        child=serializers.CharField(),
+        required=False,
+        allow_empty=True
+    )
+    selected_equipment = serializers.ListField(
+        child=serializers.CharField(),
+        required=False,
+        allow_empty=True
+    )
+
+    def validate_branch(self, value):
+        try:
+            branch = Branch.objects.get(branch_name__iexact=value.strip())
+            return branch
+        except Branch.DoesNotExist:
+            raise serializers.ValidationError(
+                f'Filial "{value}" topilmadi. Iltimos, to\'g\'ri filial nomini kiriting.'
+            )
+        except Branch.MultipleObjectsReturned:
+            raise serializers.ValidationError(
+                f'"{value}" nomli bir nechta filial mavjud. Aniqroq nom kiriting.'
+            )
+
+    def validate_specialties(self, value):
+        specialty_objects = []
+        not_found = []
+        
+        for specialty_name in value:
+            try:
+                specialty = Specialty.objects.get(name__iexact=specialty_name.strip())
+                specialty_objects.append(specialty)
+            except Specialty.DoesNotExist:
+                not_found.append(specialty_name)
+            except Specialty.MultipleObjectsReturned:
+                raise serializers.ValidationError(
+                    f'"{specialty_name}" nomli bir nechta ixtisoslik mavjud. Aniqroq nom kiriting.'
+                )
+        
+        if not_found:
+            raise serializers.ValidationError(
+                f'Quyidagi ixtisosliklar topilmadi: {", ".join(not_found)}'
+            )
+        
+        return specialty_objects
+
+    def validate_selected_specialists(self, value):
+        if not value:
+            return []
+        
+        specialist_objects = []
+        not_found = []
+        
+        for specialist_title in value:
+            try:
+                specialist = Specialist.objects.get(title__iexact=specialist_title.strip())
+                specialist_objects.append(specialist)
+            except Specialist.DoesNotExist:
+                not_found.append(specialist_title)
+            except Specialist.MultipleObjectsReturned:
+                raise serializers.ValidationError(
+                    f'"{specialist_title}" lavozimli bir nechta mutaxassis mavjud. Aniqroq lavozim kiriting.'
+                )
+        
+        if not_found:
+            raise serializers.ValidationError(
+                f'Quyidagi mutaxassislar topilmadi: {", ".join(not_found)}'
+            )
+        
+        return specialist_objects
+
+    def validate_selected_equipment(self, value):
+        if not value:
+            return []
+        
+        equipment_objects = []
+        not_found = []
+        
+        for equipment_name in value:
+            try:
+                equipment = Equipment.objects.get(name__iexact=equipment_name.strip())
+                equipment_objects.append(equipment)
+            except Equipment.DoesNotExist:
+                not_found.append(equipment_name)
+            except Equipment.MultipleObjectsReturned:
+                raise serializers.ValidationError(
+                    f'"{equipment_name}" nomli bir nechta uskuna mavjud. Aniqroq nom kiriting.'
+                )
+        
+        if not_found:
+            raise serializers.ValidationError(
+                f'Quyidagi uskunalar topilmadi: {", ".join(not_found)}'
+            )
+        
+        return equipment_objects
 
     def validate(self, data):
-        specialties = data.get('specialties')
+        specialties = data.get('specialties', [])
         selected_specialists = data.get('selected_specialists', [])
         selected_equipment = data.get('selected_equipment', [])
         
-        if not specialties:
-            raise DRFValidationError({
-                'specialties': _("Iltimos, filial uchun ixtisoslik turlarini tanlang.")
-            }, code='missing_specialties')
-
-        # At this point, DRF has already converted IDs to model instances
-        # Extract IDs for validation
-        specialty_ids = [s.id if hasattr(s, 'id') else s for s in specialties]
-        specialist_ids = [sp.id if hasattr(sp, 'id') else sp for sp in selected_specialists]
-        equipment_ids = [eq.id if hasattr(eq, 'id') else eq for eq in selected_equipment]
-
-        # Validate specialist requirements
-        if specialty_ids and specialist_ids:
-            try:
-                self._validate_specialist_requirements(specialty_ids, specialist_ids)
-            except DjangoValidationError as e:
-                raise DRFValidationError({'selected_specialists': str(e.message)})
-                
-        # Validate equipment requirements
-        if specialty_ids and equipment_ids:
-            try:
-                self._validate_equipment_requirements(specialty_ids, equipment_ids)
-            except DjangoValidationError as e:
-                raise DRFValidationError({'selected_equipment': str(e.message)})
-
+        specialist_requirements = self._get_specialist_requirements(specialties)
+        equipment_requirements = self._get_equipment_requirements(specialties)
+        
+        specialist_errors = self._validate_specialist_requirements(
+            specialties,
+            selected_specialists,
+            specialist_requirements
+        )
+        
+        equipment_errors = self._validate_equipment_requirements(
+            specialties,
+            selected_equipment,
+            equipment_requirements
+        )
+        
+        if specialist_errors or equipment_errors:
+            error_details = {
+                'requirements_not_met': True,
+                'specialist_requirements': specialist_requirements,
+                'equipment_requirements': equipment_requirements,
+            }
+            
+            if specialist_errors:
+                error_details['specialist_errors'] = specialist_errors
+            if equipment_errors:
+                error_details['equipment_errors'] = equipment_errors
+            
+            raise serializers.ValidationError(error_details)
+        
         return data
 
-    def _validate_specialist_requirements(self, specialties_list, selected_specialists_list):
-        """
-        Validate that selected specialists meet minimum requirements
-        specialties_list: list of Specialty IDs
-        selected_specialists_list: list of Specialist IDs
-        """
-        errors = []
-        
-        # Get specialty objects
-        specialties = Specialty.objects.filter(id__in=specialties_list)
-        
-        # Get selected specialist objects
-        selected_specialists = Specialist.objects.filter(id__in=selected_specialists_list)
+    def _get_specialist_requirements(self, specialties):
+        requirements = []
         
         for specialty in specialties:
             required_qs = SpecialistsRequired.objects.filter(
                 specialty=specialty
             ).select_related('required_specialists')
             
-            for requirement in required_qs:
-                required_title = requirement.required_specialists.title
-                min_count = requirement.min_count
-                
-                # Count how many of this type were selected
-                selected_count = selected_specialists.filter(title=required_title).count()
-                
-                if selected_count < min_count:
-                    errors.append(
-                        f'"{specialty.name}" ixtisosligi uchun "{required_title}" lavozimidan '
-                        f'kamida {min_count} ta tanlash shart (Siz {selected_count} ta tanladingiz).'
-                    )
+            for req in required_qs:
+                requirements.append({
+                    'specialty': specialty.name,
+                    'specialist_title': req.required_specialists.title,
+                    'min_count': req.min_count
+                })
         
-        if errors:
-            error_message = "Minimal talab qilinadigan mutaxassislarni to'liq tanlamadingiz:\n" + "\n".join(f"• {err}" for err in errors)
-            raise DjangoValidationError(error_message, code='insufficient_specialists')
+        return requirements
 
-    def _validate_equipment_requirements(self, specialties_list, selected_equipment_list):
-        """
-        Validate that selected equipment meets minimum requirements
-        specialties_list: list of Specialty IDs
-        selected_equipment_list: list of Equipment IDs
-        """
-        specialties = Specialty.objects.filter(id__in=specialties_list)
-        
-        selected_equipment = Equipment.objects.filter(id__in=selected_equipment_list)
+    def _get_equipment_requirements(self, specialties):
+        requirements = []
         
         for specialty in specialties:
             try:
                 equipment_req = EquipmentRequired.objects.get(specialty=specialty)
+                items = EquipmentRequiredItem.objects.filter(
+                    equipment_required=equipment_req
+                ).select_related('equipment')
+                
+                for item in items:
+                    requirements.append({
+                        'specialty': specialty.name,
+                        'equipment_name': item.equipment.name,
+                        'min_count': item.min_count
+                    })
             except EquipmentRequired.DoesNotExist:
                 continue
+        
+        return requirements
+
+    def _validate_specialist_requirements(self, specialties, selected_specialists, requirements):
+        errors = []
+        
+        for req in requirements:
+            count = sum(1 for sp in selected_specialists if sp.title == req['specialist_title'])
             
-            required_items = EquipmentRequiredItem.objects.filter(
-                equipment_required=equipment_req
-            ).select_related('equipment')
-            
-            for item in required_items:
-                equipment_name = item.equipment.name
-                min_count = item.min_count
-                
-                # Count how many of this type were selected
-                selected_count = selected_equipment.filter(name=equipment_name).count()
-                
-                if selected_count < min_count:
-                    raise DjangoValidationError(
-                        _("%(specialty)s ixtisosligi uchun \"%(equipment)s\" dan kamida %(min_count)s ta kiritilishi shart (Kiritilgani: %(selected_count)s).") % {
-                            'specialty': specialty.name,
-                            'equipment': equipment_name,
-                            'min_count': min_count,
-                            'selected_count': selected_count
-                        },
-                        code='insufficient_equipment'
+            if count < req['min_count']:
+                errors.append({
+                    'specialty': req['specialty'],
+                    'specialist_title': req['specialist_title'],
+                    'required': req['min_count'],
+                    'provided': count,
+                    'message': (
+                        f'"{req["specialty"]}" ixtisosligi uchun "{req["specialist_title"]}" '
+                        f'lavozimidan kamida {req["min_count"]} ta kerak '
+                        f'(Siz {count} ta tanladingiz)'
                     )
+                })
+        
+        return errors
+
+    def _validate_equipment_requirements(self, specialties, selected_equipment, requirements):
+        errors = []
+        
+        for req in requirements:
+            count = sum(1 for eq in selected_equipment if eq.name == req['equipment_name'])
+            
+            if count < req['min_count']:
+                errors.append({
+                    'specialty': req['specialty'],
+                    'equipment_name': req['equipment_name'],
+                    'required': req['min_count'],
+                    'provided': count,
+                    'message': (
+                        f'"{req["specialty"]}" ixtisosligi uchun "{req["equipment_name"]}" '
+                        f'dan kamida {req["min_count"]} ta kerak '
+                        f'(Siz {count} ta tanladingiz)'
+                    )
+                })
+        
+        return errors
 
 
 class ApplicationCreateSerializer(serializers.ModelSerializer):
@@ -148,9 +245,6 @@ class ApplicationCreateSerializer(serializers.ModelSerializer):
         ]
     
     def validate_branches(self, value):
-        """
-        Validate branches data
-        """
         if not isinstance(value, list):
             raise serializers.ValidationError("Branches must be a list")
         
@@ -176,13 +270,17 @@ class ApplicationCreateSerializer(serializers.ModelSerializer):
         if document_file:
             MAX_FILE_SIZE = 10 * 1024 * 1024 
             if document_file.size > MAX_FILE_SIZE:
-                raise serializers.ValidationError(_("Fayl hajmi 10 MB dan oshmasligi kerak."))
+                raise serializers.ValidationError(
+                    _("Fayl hajmi 10 MB dan oshmasligi kerak.")
+                )
                 
             file_extension = document_file.name.split('.')[-1].lower()
             ALLOWED_EXTENSIONS = ['pdf', 'jpg', 'png']
             
             if file_extension not in ALLOWED_EXTENSIONS:
-                raise serializers.ValidationError(_("Faqat PDF, JPG va PNG formatlari ruxsat etiladi."))
+                raise serializers.ValidationError(
+                    _("Faqat PDF, JPG va PNG formatlari ruxsat etiladi.")
+                )
                 
         return document_file
     
@@ -195,7 +293,6 @@ class ApplicationCreateSerializer(serializers.ModelSerializer):
             specialties = branch_data.pop('specialties', [])
             selected_specialists = branch_data.pop('selected_specialists', [])
             selected_equipment = branch_data.pop('selected_equipment', [])
-            
             branch_instance = branch_data.pop('branch')
             
             app_branch = ApplicationBranch.objects.create(
