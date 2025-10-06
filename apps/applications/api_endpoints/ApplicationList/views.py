@@ -1,6 +1,8 @@
 from django_filters.rest_framework import DjangoFilterBackend
 
+from rest_framework import status
 from rest_framework import filters
+from rest_framework.response import Response
 from rest_framework.generics import ListAPIView
 from rest_framework.permissions import IsAuthenticated
 
@@ -28,8 +30,18 @@ class ApplicationListAPIView(ListAPIView):
         queryset = Application.objects.all()
         if not self.request.user.is_staff:
             queryset = queryset.filter(user=self.request.user)
-        
+
         return queryset
+    
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        if not queryset.exists():
+            return Response({
+                "message": "Sizda hali arizalar mavjud emas."
+            },
+            status=status.HTTP_204_NO_CONTENT)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
 
 __all__ = [
