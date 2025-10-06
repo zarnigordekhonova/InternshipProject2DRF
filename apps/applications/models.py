@@ -49,6 +49,10 @@ class Branch(models.Model):
         return f"{self.district}"
     
     class Meta:
+        indexes = [
+            models.Index(fields=["district"]),
+            models.Index(fields=["branch_name"])
+            ]
         verbose_name = _("Branch")
         verbose_name_plural = _("Branches")
 
@@ -60,6 +64,9 @@ class Specialty(models.Model):
         return self.name
     
     class Meta:
+        indexes = [
+            models.Index(fields=["name"])
+        ]
         verbose_name = _("Specialty")
         verbose_name_plural = _("Specialties")
 
@@ -71,6 +78,9 @@ class Specialist(models.Model):
         return self.title
     
     class Meta:
+        indexes = [
+            models.Index(fields=["title"])
+        ]
         verbose_name = _("Specialist")
         verbose_name_plural = _("Specialists")
 
@@ -91,6 +101,9 @@ class SpecialistsRequired(models.Model):
         return f"{self.specialty.name}: Min. {self.min_count} x {self.required_specialists.title}"
 
     class Meta:
+        indexes = [
+            models.Index(fields=["specialty"])
+        ]
         verbose_name = _("Specialist Required")
         verbose_name_plural = _("Specialists Required")
         unique_together = ('specialty', 'required_specialists')
@@ -104,6 +117,9 @@ class Equipment(models.Model):
         return self.name
     
     class Meta:
+        indexes = [
+            models.Index(fields=["name"])
+        ]
         verbose_name = _("Equipment")
         verbose_name_plural = _("Equipments")
 
@@ -143,6 +159,9 @@ class EquipmentRequiredItem(models.Model):
         return f"{self.equipment.name} (Min: {self.min_count})"
     
     class Meta:
+        indexes = [
+            models.Index(fields=["equipment_required"])
+        ]
         verbose_name = _("Equipment Required Item")
         verbose_name_plural = _("Equipment Required Items")
         unique_together = ('equipment_required', 'equipment')
@@ -197,6 +216,10 @@ class Application(models.Model):
         return f"{self.registration_number}"
     
     class Meta:
+        indexes = [
+            models.Index(fields=["user"]),
+            models.Index(fields=["status"]),
+        ]
         verbose_name = "Application"
         verbose_name_plural = "Applications"
 
@@ -228,5 +251,9 @@ class ApplicationBranch(models.Model):
         return self.branch.branch_name     
     
     class Meta:
+        indexes = [
+            models.Index(fields=["application"]),
+            models.Index(fields=["branch"])
+        ]
         verbose_name = "Application Branch"
-        verbose_name = "Applications Branch"
+        verbose_name_plural = "Applications Branch"

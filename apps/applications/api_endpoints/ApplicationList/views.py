@@ -25,13 +25,7 @@ class ApplicationListAPIView(ListAPIView):
     ordering = ['-created_at']
     
     def get_queryset(self):
-        queryset = Application.objects.select_related('user').prefetch_related(
-            'applicationbranch_set__branch__district__region',
-            'applicationbranch_set__specialties',
-            'applicationbranch_set__selected_specialists',
-            'applicationbranch_set__selected_equipment'
-        )
-        
+        queryset = Application.objects.all()
         if not self.request.user.is_staff:
             queryset = queryset.filter(user=self.request.user)
         
