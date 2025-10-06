@@ -1,3 +1,5 @@
+from django.utils.translation import gettext as _
+
 from rest_framework import serializers
 from apps.applications.models import Branch, District
 
@@ -33,9 +35,9 @@ class BranchUpdateSerializer(serializers.ModelSerializer):
             try: 
                 district = District.objects.get(district_name=district_name_str)
             except District.DoesNotExist:
-                raise serializers.ValidationError({"district_input": "Bunday nomdagi tuman mavjud emas."})
+                raise serializers.ValidationError({"district_input": _("Bunday nomdagi tuman mavjud emas.")})
             except District.MultipleObjectsReturned:
-                raise serializers.ValidationError({"district_input": "Bunday nomda bir nechta tuman mavjud, aniq nom kiriting."})
+                raise serializers.ValidationError({"district_input": _("Bunday nomda bir nechta tuman mavjud, aniq nom kiriting.")})
             
             instance.district = district
         

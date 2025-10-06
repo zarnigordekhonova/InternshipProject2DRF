@@ -1,4 +1,4 @@
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext as _
 
 from rest_framework import serializers
 
@@ -33,11 +33,11 @@ class SpecialistRequiredUpdateSerializer(serializers.ModelSerializer):
                 instance.specialty = specialty
             except Specialty.DoesNotExist:
                 raise serializers.ValidationError({
-                    "specialty_input_info": "Bunday nomdagi ixtisoslik turi mavjud emas."
+                    "specialty_input_info": _("Bunday nomdagi ixtisoslik turi mavjud emas.")
                 })
             except Specialty.MultipleObjectsReturned:
                 raise serializers.ValidationError({
-                    "specialty_input_info": "Bunday nomda bir nechta ixtisoslik mavjud, aniq nom kiriting."
+                    "specialty_input_info": _("Bunday nomda bir nechta ixtisoslik mavjud, aniq nom kiriting.")
                 })
         
         if 'specialist_input_info' in validated_data:
@@ -47,11 +47,11 @@ class SpecialistRequiredUpdateSerializer(serializers.ModelSerializer):
                 instance.required_specialists = specialist
             except Specialist.DoesNotExist:
                 raise serializers.ValidationError({
-                    "specialist_input_info": "Bunday lavozimli mutaxassis mavjud emas."
+                    "specialist_input_info": _("Bunday lavozimli mutaxassis mavjud emas.")
                 })
             except Specialist.MultipleObjectsReturned:
                 raise serializers.ValidationError({
-                    "specialist_input_info": "Bunday lavozimda bir nechta mutaxassis mavjud, aniq lavozim kiriting."
+                    "specialist_input_info": _("Bunday lavozimda bir nechta mutaxassis mavjud, aniq lavozim kiriting.")
                 })
         
         if 'min_count' in validated_data:

@@ -1,3 +1,5 @@
+from django.utils.translation import gettext as _
+
 from rest_framework import serializers
 
 from apps.applications.models import Branch, District
@@ -21,9 +23,9 @@ class BranchCreateSerializer(serializers.ModelSerializer):
         try: 
             district_name = District.objects.get(district_name=district)
         except District.DoesNotExist:
-            raise serializers.ValidationError({"district": "Bunday nomdagi tuman mavjud emas."})
+            raise serializers.ValidationError({"district": _("Bunday nomdagi tuman mavjud emas.")})
         except District.MultipleObjectsReturned:
-            raise serializers.ValidationError({"district": "Bunday nomda bir nechta tuman mavjud, aniq nom kiriting."})
+            raise serializers.ValidationError({"district": _("Bunday nomda bir nechta tuman mavjud, aniq nom kiriting.")})
         
         branch = Branch.objects.create(district=district_name, **validated_data)
         return branch

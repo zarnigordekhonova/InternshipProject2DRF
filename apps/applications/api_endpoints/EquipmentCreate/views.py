@@ -1,3 +1,5 @@
+from django.utils.translation import gettext as _
+
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.generics import CreateAPIView
@@ -27,7 +29,7 @@ class EquipmentCreateAPIView(CreateAPIView):
         branch = serializer.save()
         return Response(
             {
-                "message": "Jihoz nomi muvaffaqiyatli qo'shildi.",
+                "message": _("Jihoz nomi muvaffaqiyatli qo'shildi."),
                 "data": self.get_serializer(branch).data
             },
             status=status.HTTP_201_CREATED

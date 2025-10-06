@@ -1,4 +1,4 @@
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext as _
 
 from rest_framework import serializers
 
@@ -29,10 +29,10 @@ class ApplicationUpdateSerializer(serializers.ModelSerializer):
     def validate_branches(self, value):
         """Validate branches data using string inputs"""
         if not isinstance(value, list):
-            raise serializers.ValidationError("Branches must be a list")
+            raise serializers.ValidationError(_("Branches must be a list"))
         
         if len(value) == 0:
-            raise serializers.ValidationError("At least one branch is required")
+            raise serializers.ValidationError(_("At least one branch is required"))
         
         validated_branches = []
         errors = {}

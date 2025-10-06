@@ -1,3 +1,5 @@
+from django.utils.translation import gettext as _
+
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -26,7 +28,8 @@ class EquipmentUpdateDetailAPIView(RetrieveUpdateAPIView):
         try:
             equipment = Equipment.objects.get(pk=pk)
         except Equipment.DoesNotExist:
-            return Response({"detail": "Bu id dagi jihoz nomi topilmadi!"}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"detail": _("Bu id dagi jihoz nomi topilmadi!")}, 
+                            status=status.HTTP_404_NOT_FOUND)
 
         serializer = self.get_serializer(equipment)
         return Response(serializer.data, status=status.HTTP_200_OK)

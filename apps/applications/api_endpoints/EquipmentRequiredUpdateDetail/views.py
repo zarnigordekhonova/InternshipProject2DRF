@@ -1,3 +1,5 @@
+from django.utils.translation import gettext as _
+
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -28,7 +30,7 @@ class EquipmentRequiredItemRetrieveUpdateAPIView(RetrieveUpdateAPIView):
             branch = EquipmentRequiredItem.objects.get(pk=pk)
         except EquipmentRequiredItem.DoesNotExist:
             return Response({
-                "detail": "Bu id dagi minimal talab qilingan jihozlar ro'yxati topilmadi!"
+                "detail": _("Bu id dagi minimal talab qilingan jihozlar ro'yxati topilmadi!")
                 }, 
                 status=status.HTTP_404_NOT_FOUND)
 

@@ -1,3 +1,4 @@
+from django.utils.translation import gettext as _
 from django_filters.rest_framework import DjangoFilterBackend
 
 from rest_framework import status
@@ -37,7 +38,7 @@ class ApplicationListAPIView(ListAPIView):
         queryset = self.get_queryset()
         if not queryset.exists():
             return Response({
-                "message": "Sizda hali arizalar mavjud emas."
+                "message": _("Sizda hali arizalar mavjud emas.")
             },
             status=status.HTTP_204_NO_CONTENT)
         serializer = self.get_serializer(queryset, many=True)

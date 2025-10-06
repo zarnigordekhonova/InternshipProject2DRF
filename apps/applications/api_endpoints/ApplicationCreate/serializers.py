@@ -1,7 +1,5 @@
 from rest_framework import serializers
-from django.utils.translation import gettext_lazy as _
-from django.core.exceptions import ValidationError as DjangoValidationError 
-from rest_framework.exceptions import ValidationError as DRFValidationError 
+from django.utils.translation import gettext as _
 
 from apps.applications.models import (
     Application, ApplicationBranch, Specialty, 
@@ -34,7 +32,7 @@ class ApplicationBranchSerializer(serializers.Serializer):
             return branch
         except Branch.DoesNotExist:
             raise serializers.ValidationError(
-                f'Filial "{value}" topilmadi. Iltimos, to\'g\'ri filial nomini kiriting.'
+               f'Filial "{value}" topilmadi. Iltimos, to\'g\'ri filial nomini kiriting.'
             )
         except Branch.MultipleObjectsReturned:
             raise serializers.ValidationError(
@@ -53,7 +51,7 @@ class ApplicationBranchSerializer(serializers.Serializer):
                 not_found.append(specialty_name)
             except Specialty.MultipleObjectsReturned:
                 raise serializers.ValidationError(
-                    f'"{specialty_name}" nomli bir nechta ixtisoslik mavjud. Aniqroq nom kiriting.'
+                   f'"{specialty_name}" nomli bir nechta ixtisoslik mavjud. Aniqroq nom kiriting.'
                 )
         
         if not_found:
@@ -103,7 +101,7 @@ class ApplicationBranchSerializer(serializers.Serializer):
                 not_found.append(equipment_name)
             except Equipment.MultipleObjectsReturned:
                 raise serializers.ValidationError(
-                    f'"{equipment_name}" nomli bir nechta uskuna mavjud. Aniqroq nom kiriting.'
+                   f'"{equipment_name}" nomli bir nechta uskuna mavjud. Aniqroq nom kiriting.'
                 )
         
         if not_found:
@@ -246,10 +244,10 @@ class ApplicationCreateSerializer(serializers.ModelSerializer):
     
     def validate_branches(self, value):
         if not isinstance(value, list):
-            raise serializers.ValidationError("Branches must be a list")
+            raise serializers.ValidationError(_("Branches must be a list"))
         
         if len(value) == 0:
-            raise serializers.ValidationError("At least one branch is required")
+            raise serializers.ValidationError(_("At least one branch is required"))
         
         validated_branches = []
         errors = {}
