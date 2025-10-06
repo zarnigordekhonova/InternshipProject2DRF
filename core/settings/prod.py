@@ -1,5 +1,5 @@
-# from .base import *  # noqa
+from .base import *  # noqa
 
-# ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["*"]
 
-# DEBUG = False
+DEBUG = False
